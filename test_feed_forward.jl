@@ -27,7 +27,7 @@ x = convert(Array, iris[1:4])
 y = hcat([d[l] for l in iris[5]]...)'
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.5)
 
-## trainモデル (4→10→10→3のFFNN) #
+## trainモデル ##
 train_layer = MemoryDataLayer(batch_size=10, data=Array[x_train', y_train'])
 hidden_layer = InnerProductLayer(name="hidden", neuron = Neurons.ReLU(), output_dim = 7, tops=[:hidden], bottoms=[:data])
 out_layer = InnerProductLayer(name="out", output_dim = 3, tops=[:out], bottoms=[:hidden])
