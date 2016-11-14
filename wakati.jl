@@ -5,8 +5,9 @@
 =#
 
 using MeCab
+using TinySegmenter
+
 mecab = Mecab()
-
 results = parse(mecab, "すもももももももものうち")
-println(join([result.surface for result in results], "\n"))
-
+println(join([result.surface for result in results], "|"))
+println(join(tokenize(string), "|"))
