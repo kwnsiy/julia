@@ -1,4 +1,4 @@
-using Mecab
+using MeCab
 using DataStructures
 
 # morphological analysis
