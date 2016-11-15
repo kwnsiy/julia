@@ -7,7 +7,9 @@
 using MeCab
 using TinySegmenter
 
+string = "すもももももももものうち"
+
 mecab = Mecab()
-results = parse(mecab, "すもももももももものうち")
+results = parse(mecab, string)
 println(join([result.surface for result in results], "|"))
 println(join(tokenize(string), "|"))
