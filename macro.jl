@@ -1,5 +1,7 @@
 # coding:utf-8
 
+@windows_only println("unix環境推奨")
+
 """ @swap! """
 macro swap!(x,y)
   quote
@@ -9,16 +11,21 @@ macro swap!(x,y)
   end
 end
 
-
 """ @cd """
 macro cd(obj)
   :(cd($obj))
 end
 
-
 """ @pwd """
 macro pwd()
   :(pwd())
+end
+
+""" @head """
+macro head(filename)
+  quote
+    $(run(`head $filename -n 3`))
+  end
 end
 
 """ @replace! """
@@ -29,6 +36,26 @@ macro replace!(string, pat, r)
   end
 end
 
+""" @assign! """
+macro assign!(a, b)
+  quote
+    $(esc(a)) = $(eval(b))
+    return
+  end
+end
+
+""" @toCmd """
+macro toCmd(string)
+  return `$string`
+end
+
+
+""" @run """
+macro run(cmd)
+  quote
+    $(run(eval(cmd)))
+  end
+end
 
 """ @split! """
 macro split!(string, chars)
@@ -38,25 +65,24 @@ macro split!(string, chars)
   end
 end
 
-
 """ @rstrip! """
 macro rstrip!(string)
   quote
-    $(esc(string)) = $(eval(rsrtrip(eval(string))))
+    $(esc(string)) = $(eval(rstrip(eval(string))))
     return
   end
 end
 
 
 """ @println """
-macro println(obj)
-  :(println($obj))
+macro println(obj...)
+  :(println($obj...))
 end
 
 
 """ @print """
-macro print(obj)
-  :(print($obj))
+macro print(obj...)
+  :(print($obj...))
 end
 
 
@@ -70,3 +96,20 @@ end
 macro decr!(x)
   :($x -= 1)
 end
+
+""" iconv """
+function iconv(inputfile, outputfile, from, to)
+  return readall(pipeline(`iconv -f $from -t $to $inputfile`, outfile))
+end
+
+
+# convert any character encoding to utf8
+""" readall_utf8 """
+function readall_utf8(filename)
+  return readall(pipeline(`iconv -t UTF-8 $filename`))
+end
+
+function readall_utf8(filename, from)
+  return readall(pipeline(`iconv -f $from -t UTF-8 $filename`))
+end
+
